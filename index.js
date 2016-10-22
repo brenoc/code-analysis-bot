@@ -192,9 +192,7 @@ function main(messages, owner, repo, number) {
 }
 
 var content = '';
-process.stdin.resume();
-process.stdin.on('data', function(buf) { content += buf.toString(); });
-process.stdin.on('end', function() {
+function start() {
   var messages = {};
 
   // Since we send a few http requests to setup the process, we don't want
@@ -237,10 +235,20 @@ process.stdin.on('end', function() {
     delete messages[absolutePath];
   }
 
-  var user = process.env.CI_USER;
+  var owner = process.env.CI_OWNER;
   var repo = process.env.CI_REPO;
   var number = process.env.PULL_REQUEST_NUMBER;
 
   // intentional lint warning to make sure that the bot is working :)
-  main(messages, user, repo, number);
-});
+  main(messages, owner, repo, number);
+}
+
+process.stdin.resume();
+process.stdin.on('data', function(buf) { content += buf.toString(); });
+process.stdin.on('end', start);
+
+if (process.env.NODE_ENV === 'development') {
+  content = `eslint
+[{"filePath":"/Users/breno/Projects/code-analysis-bot/index.js","messages":[],"errorCount":0,"warningCount":0},{"filePath":"/Users/breno/Projects/code-analysis-bot/exampleFile.js","messages":[{"ruleId":"strict","severity":2,"message":"Use the global form of 'use strict'.","line":1,"column":1,"nodeType":"Program","source":"var a = (true && false);"},{"ruleId":"no-unused-vars","severity":2,"message":"'a' is assigned a value but never used.","line":1,"column":5,"nodeType":"Identifier","source":"var a = (true && false);"},{"ruleId":"no-extra-parens","severity":2,"message":"Gratuitous parentheses around expression.","line":1,"column":9,"nodeType":"LogicalExpression","source":"var a = (true && false);","fix":{"range":[8,23],"text":"true && false"}}],"errorCount":3,"warningCount":0,"source":"var a = (true && false);"}]`;
+  start();
+}
