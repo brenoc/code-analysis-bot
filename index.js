@@ -9,12 +9,12 @@
  */
 'use strict';
 
-if (!process.env.CI_USER) {
-  console.error('Missing CI_USER. Example: facebook');
+if (!process.env.CI_OWNER) {
+  console.error('Missing CI_OWNER. Example: brenoc');
   process.exit(1);
 }
 if (!process.env.CI_REPO) {
-  console.error('Missing CI_REPO. Example: react-native');
+  console.error('Missing CI_REPO. Example: code-analysis-bot');
   process.exit(1);
 }
 if (!process.env.GITHUB_TOKEN) {
@@ -22,7 +22,7 @@ if (!process.env.GITHUB_TOKEN) {
   process.exit(1);
 }
 if (!process.env.PULL_REQUEST_NUMBER) {
-  console.error('Missing PULL_REQUEST_NUMBER. Example: 4687');
+  console.error('Missing PULL_REQUEST_NUMBER. Example: 2');
   // for master branch don't throw and error
   process.exit(0);
 }
@@ -96,8 +96,8 @@ var converters = {
   }
 };
 
-function getShaFromPullRequest(user, repo, number, callback) {
-  github.pullRequests.get({user, repo, number}, (error, res) => {
+function getShaFromPullRequest(owner, repo, number, callback) {
+  github.pullRequests.get({owner, repo, number}, (error, res) => {
     if (error) {
       console.log(error);
       return;
@@ -106,8 +106,8 @@ function getShaFromPullRequest(user, repo, number, callback) {
   });
 }
 
-function getFilesFromCommit(user, repo, sha, callback) {
-  github.repos.getCommit({user, repo, sha}, (error, res) => {
+function getFilesFromCommit(owner, repo, sha, callback) {
+  github.repos.getCommit({owner, repo, sha}, (error, res) => {
     if (error) {
       console.log(error);
       return;
@@ -146,14 +146,14 @@ function getLineMapFromPatch(patchString) {
   return lineMap;
 }
 
-function sendComment(user, repo, number, sha, filename, lineMap, message) {
+function sendComment(owner, repo, number, sha, filename, lineMap, message) {
   if (!lineMap[message.line]) {
     // Do not send messages on lines that did not change
     return;
   }
 
   var opts = {
-    user,
+    owner,
     repo,
     number,
     sha,
@@ -162,7 +162,7 @@ function sendComment(user, repo, number, sha, filename, lineMap, message) {
     body: message.message,
     position: lineMap[message.line],
   };
-  github.pullRequests.createComment(opts, function(error, res) {
+  github.pullRequests.createComment(opts, function(error) {
     if (error) {
       console.log(error);
       return;
@@ -171,20 +171,20 @@ function sendComment(user, repo, number, sha, filename, lineMap, message) {
   console.log('Sending comment', opts);
 }
 
-function main(messages, user, repo, number) {
+function main(messages, owner, repo, number) {
   // No message, we don't need to do anything :)
   if (Object.keys(messages).length === 0) {
     return;
   }
 
-  getShaFromPullRequest(user, repo, number, (sha) => {
-    getFilesFromCommit(user, repo, sha, (files) => {
+  getShaFromPullRequest(owner, repo, number, (sha) => {
+    getFilesFromCommit(owner, repo, sha, (files) => {
       files
         .filter((file) => messages[file.filename])
         .forEach((file) => {
           var lineMap = getLineMapFromPatch(file.patch);
           messages[file.filename].forEach((message) => {
-            sendComment(user, repo, number, sha, file.filename, lineMap, message);
+            sendComment(owner, repo, number, sha, file.filename, lineMap, message);
           });
         });
     });
