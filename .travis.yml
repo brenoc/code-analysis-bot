@@ -1,0 +1,19 @@
+language: node_js
+node_js:
+  - "6"
+cache:
+  directories:
+  - node_modules
+  - .nvm
+install:
+- npm install
+script:
+- 'cat <(echo eslint; npm run lint --silent -- --format=json;) | PULL_REQUEST_NUMBER=$TRAVIS_PULL_REQUEST node index.js'
+branches:
+  only:
+  - master
+env:
+  global:
+    CI_OWNER: brenoc
+    CI_REPO: code-analysis-bot
+    secure: q9pQRMtwiefizRDAnSInIoEnTozMjjku+4YewnqcxPhWR6HbSSAuMDO0SYGX0W8Z3siQHy1jSZrol2kw7LAX4jc3p0aKn/RehdNam5rGUO9hJh4ppClpVfViYhyCyLucXDLRrlys8bagVUc2kNQAwTx66t+uwUxQnUrMijIL9gLrUy/t3XkQsS83EZ1kvIvze6TlWnSMkSdpdt+KhPAS3k7rOOtleYLuRYGvUMo5E5CVUPN5abJzl+Tw5XZZNhq2a7a8gygrsUvRjVAnqGNDwJIsOeih71SyyzXU0tz04Y3DTS52ikGJSRaeCJuInmkEdqfvLCi+xrl4dhRI6XGbslzeBT/K+Y+f0cAWu1f5Rk7PuFswwSR0+QRmf5RcAO0/kNg+t3ZE0dHP5p+9feIxr/cq/jLdlRCAADM5HJCUviUR9+HE9C24J4faQX5vW+cBt2sZdSOzb+9JRB6a10Ax3cPhOve+qXo8R9qO3U71MuFQGxZiQLyuiBzRiXroPNHVRhNvwpdBKQvnBf2tU/yq3e0cDU71kqpOrBdAfbscfte08R9qEMuV3KkwKBnJUDaKx1TCzJJsjTrY7HmUJqmIPI7BaJYNneZw7aCJ0ePPCwpwLp/p9x9PHzNtixsLTWdyfuVzP4oVqtkWXUYJ1z67a9gGKQ/+zwNePT23Gb+TCu0=
