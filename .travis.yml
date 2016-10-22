@@ -1,19 +1,20 @@
 language: node_js
 node_js:
-  - "6"
+- '6'
 cache:
   directories:
   - node_modules
-  - .nvm
+  - ".nvm"
 install:
 - npm install
 script:
-- 'cat <(echo eslint; npm run lint --silent -- --format=json;) | PULL_REQUEST_NUMBER=$TRAVIS_PULL_REQUEST node index.js'
+- cat <(echo eslint; npm run lint --silent -- --format=json;) | PULL_REQUEST_NUMBER=$TRAVIS_PULL_REQUEST
+  node index.js
 branches:
   only:
   - master
 env:
   global:
-    CI_OWNER: brenoc
-    CI_REPO: code-analysis-bot
-    secure: q9pQRMtwiefizRDAnSInIoEnTozMjjku+4YewnqcxPhWR6HbSSAuMDO0SYGX0W8Z3siQHy1jSZrol2kw7LAX4jc3p0aKn/RehdNam5rGUO9hJh4ppClpVfViYhyCyLucXDLRrlys8bagVUc2kNQAwTx66t+uwUxQnUrMijIL9gLrUy/t3XkQsS83EZ1kvIvze6TlWnSMkSdpdt+KhPAS3k7rOOtleYLuRYGvUMo5E5CVUPN5abJzl+Tw5XZZNhq2a7a8gygrsUvRjVAnqGNDwJIsOeih71SyyzXU0tz04Y3DTS52ikGJSRaeCJuInmkEdqfvLCi+xrl4dhRI6XGbslzeBT/K+Y+f0cAWu1f5Rk7PuFswwSR0+QRmf5RcAO0/kNg+t3ZE0dHP5p+9feIxr/cq/jLdlRCAADM5HJCUviUR9+HE9C24J4faQX5vW+cBt2sZdSOzb+9JRB6a10Ax3cPhOve+qXo8R9qO3U71MuFQGxZiQLyuiBzRiXroPNHVRhNvwpdBKQvnBf2tU/yq3e0cDU71kqpOrBdAfbscfte08R9qEMuV3KkwKBnJUDaKx1TCzJJsjTrY7HmUJqmIPI7BaJYNneZw7aCJ0ePPCwpwLp/p9x9PHzNtixsLTWdyfuVzP4oVqtkWXUYJ1z67a9gGKQ/+zwNePT23Gb+TCu0=
+  - CI_OWNER: brenoc
+  - CI_REPO: code-analysis-bot
+  - secure: tZSjH+Tt7zxucQ20+X/Calhw/EC2b3xJEyCqZhNkdpaJiw2kBi2xZzCOdg57jZMIa0hDsjA0AML/3/33IshTpyQCTHbBJhRE0p+eVix8w6oe5L5snlXNLHoWR1gqBgj0SJzDjGu1nV4PCfXOppLfMEQCHLhIjXLEpt0fXB9lvGfrEe0oWOsCvZ3smT77/7VKjdULNxHpnRVo8JDXQEFUa/acenTy2i4W8hCZgbVZZ3rIzF6iHjRvhxxrP6VL/vS6SwCCpSgq7tpX3RIPzXakWTE7bAMNK6sSJcOA6FdKgCNnN+pSbaz9cXjHP5PB5+qkEmPsbNZlz4I/q7FaXUwBVwmlXBszYoZ87s6Vscb8Hf0dyO+drYXtdEOykd1MrPcfJMQXLwBajyzl7L8AwfC2YejI39P8xMpBJRQbqDZOThynK3ro6tL9/l34usThirt/BUGsAjimW6bYrWJh7uIcQ14CI7XXZ2cc6LwE+eGCuXH9kadINaDp6Sqd5q+SHgQSF13ik9R2Ginjg00TAqq1ITbz9wwRrDxpZDfHdVGF5jWSEcyjWRKPxaeftUqM9Z6W+n+Dd1Z9+JXjUinIR2OWlegdMXX/D9+YIJ5M9uWK9MrEppMmhZNi/pvy3/pbblOTRaad5ev5cHsG9k/c3HkulXhJgpf2cmpY6HMTfn26AZU=
